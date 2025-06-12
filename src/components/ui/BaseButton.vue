@@ -2,13 +2,33 @@
   <button
     :class="buttonClasses"
     :disabled="disabled || loading"
-    @click="$emit('click', $event)"
+    @click="handleClick"
   >
     <!-- 로딩 스피너 -->
-    <div v-if="loading" class="spinner"></div>
+    <svg
+      v-if="loading"
+      class="animate-spin -ml-1 mr-3 h-5 w-5"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <circle
+        class="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        stroke-width="4"
+      ></circle>
+      <path
+        class="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      ></path>
+    </svg>
 
-    <!-- 슬롯으로 버튼 내용 -->
-    <slot v-if="!loading" />
+    <!-- 버튼 텍스트 -->
+    <slot />
   </button>
 </template>
 
@@ -27,118 +47,57 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 // 이벤트 정의
-defineEmits<{
+const emit = defineEmits<{
   click: [event: MouseEvent];
 }>();
 
-// 버튼 클래스 동적 계산
-const buttonClasses = computed(() => [
-  "base-button",
-  `base-button--${props.variant}`,
-  `base-button--${props.size}`,
-  {
-    "base-button--disabled": props.disabled,
-    "base-button--loading": props.loading,
-  },
-]);
-</script>
-
-<style scoped>
-.base-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  position: relative;
-  text-decoration: none;
-}
-
-/* 사이즈 변형 */
-.base-button--small {
-  padding: 6px 12px;
-  font-size: 14px;
-  height: 32px;
-}
-
-.base-button--medium {
-  padding: 8px 16px;
-  font-size: 16px;
-  height: 40px;
-}
-
-.base-button--large {
-  padding: 12px 24px;
-  font-size: 18px;
-  height: 48px;
-}
-
-/* 색상 변형 */
-.base-button--primary {
-  background-color: #3b82f6;
-  color: white;
-}
-
-.base-button--primary:hover:not(:disabled) {
-  background-color: #2563eb;
-}
-
-.base-button--secondary {
-  background-color: #6b7280;
-  color: white;
-}
-
-.base-button--secondary:hover:not(:disabled) {
-  background-color: #4b5563;
-}
-
-.base-button--outline {
-  background-color: transparent;
-  color: #3b82f6;
-  border: 1px solid #3b82f6;
-}
-
-.base-button--outline:hover:not(:disabled) {
-  background-color: #3b82f6;
-  color: white;
-}
-
-.base-button--text {
-  background-color: transparent;
-  color: #3b82f6;
-  padding: 4px 8px;
-}
-
-.base-button--text:hover:not(:disabled) {
-  background-color: #f3f4f6;
-}
-
-/* 상태 */
-.base-button--disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.base-button--loading {
-  cursor: not-allowed;
-}
-
-/* 로딩 스피너 */
-.spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid currentColor;
-  border-top: 2px solid transparent;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+/**
+ * 버튼 클릭 이벤트 핸들러
+ * 로딩 중이거나 비활성화된 경우 이벤트를 무시
+ */
+const handleClick = (event: MouseEvent) => {
+  if (!props.loading && !props.disabled) {
+    emit("click", event);
   }
-}
-</style>
+};
+
+/**
+ * 버튼 스타일 계산
+ * variant, size, disabled, loading 상태에 따라 클래스 조합
+ */
+const buttonClasses = computed(() => {
+  const baseClasses =
+    "inline-flex items-center justify-center font-medium rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
+
+  // 크기별 클래스
+  const sizeClasses = {
+    small: "px-3 py-1.5 text-sm",
+    medium: "px-4 py-2 text-base",
+    large: "px-6 py-3 text-lg",
+  };
+
+  // 변형별 클래스
+  const variantClasses = {
+    primary:
+      "bg-primary-600 hover:bg-primary-700 text-white focus:ring-primary-500",
+    secondary:
+      "bg-gray-200 hover:bg-gray-300 text-gray-800 focus:ring-gray-500",
+    outline:
+      "border-2 border-primary-600 text-primary-600 hover:bg-primary-50 focus:ring-primary-500",
+    text: "text-primary-600 hover:bg-primary-50 focus:ring-primary-500",
+  };
+
+  // 상태별 클래스
+  const stateClasses =
+    props.disabled || props.loading
+      ? "opacity-50 cursor-not-allowed"
+      : "cursor-pointer";
+
+  return [
+    baseClasses,
+    sizeClasses[props.size],
+    variantClasses[props.variant],
+    stateClasses,
+  ].join(" ");
+});
+</script>
