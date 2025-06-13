@@ -1,75 +1,116 @@
 <template>
-  <div class="home-page">
+  <div class="px-0">
     <!-- 히어로 섹션 -->
-    <section class="hero-section">
-      <div class="hero-content">
-        <h1 class="hero-title">Vue Commerce에 오신 것을 환영합니다</h1>
-        <p class="hero-description">최고의 상품을 합리적인 가격에 만나보세요</p>
-        <div class="hero-actions">
+    <section
+      class="bg-gradient-to-br from-blue-500 via-purple-600 to-purple-700 text-white py-20 text-center -mx-4 mb-16 md:py-24"
+    >
+      <div class="max-w-4xl mx-auto px-4">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+          Vue Commerce에 오신 것을 환영합니다
+        </h1>
+        <p class="text-lg md:text-xl mb-8 opacity-90">
+          최고의 쇼핑 경험을 위한 현대적인 이커머스 플랫폼
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <BaseButton size="large" @click="goToProducts">
             상품 둘러보기
           </BaseButton>
-          <BaseButton variant="outline" size="large" @click="goToSale">
-            세일 상품 보기
+          <BaseButton
+            variant="outline"
+            size="large"
+            @click="goToSale"
+            class="!text-white !border-white hover:!bg-white hover:!text-purple-700"
+          >
+            특가 상품 보기
           </BaseButton>
         </div>
       </div>
     </section>
 
     <!-- 카테고리 섹션 -->
-    <section class="categories-section">
-      <h2 class="section-title">인기 카테고리</h2>
-      <div class="categories-grid">
+    <section class="mb-16">
+      <h2
+        class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800"
+      >
+        인기 카테고리
+      </h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
         <BaseCard
           v-for="category in categories"
           :key="category.id"
           hover
           clickable
           @click="goToCategory(category.id)"
-          class="category-card"
+          class="text-center p-6 cursor-pointer transform hover:scale-105 transition-transform duration-200"
         >
-          <div class="category-content">
-            <div class="category-icon">{{ category.icon }}</div>
-            <h3 class="category-name">{{ category.name }}</h3>
-            <p class="category-description">{{ category.description }}</p>
-          </div>
+          <div class="text-4xl mb-4">{{ category.icon }}</div>
+          <h3 class="text-xl font-semibold mb-2 text-gray-800">
+            {{ category.name }}
+          </h3>
+          <p class="text-gray-600">{{ category.description }}</p>
         </BaseCard>
       </div>
     </section>
 
     <!-- 특징 섹션 -->
-    <section class="features-section">
-      <h2 class="section-title">왜 Vue Commerce를 선택해야 할까요?</h2>
-      <div class="features-grid">
-        <div v-for="feature in features" :key="feature.id" class="feature-item">
-          <div class="feature-icon">{{ feature.icon }}</div>
-          <h3 class="feature-title">{{ feature.title }}</h3>
-          <p class="feature-description">{{ feature.description }}</p>
+    <section class="mb-16">
+      <h2
+        class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800"
+      >
+        왜 Vue Commerce를 선택해야 할까요?
+      </h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div
+          v-for="feature in features"
+          :key="feature.id"
+          class="text-center p-6"
+        >
+          <div class="text-4xl mb-4">{{ feature.icon }}</div>
+          <h3 class="text-xl font-semibold mb-3 text-gray-800">
+            {{ feature.title }}
+          </h3>
+          <p class="text-gray-600">{{ feature.description }}</p>
         </div>
       </div>
     </section>
 
-    <!-- 테스트 모달 버튼 -->
-    <section class="demo-section">
-      <h2 class="section-title">UI 컴포넌트 데모</h2>
-      <div class="demo-grid">
-        <div class="demo-item">
-          <h3>버튼 컴포넌트</h3>
-          <div class="button-demo">
+    <!-- UI 컴포넌트 데모 섹션 -->
+    <section class="bg-white p-8 rounded-xl shadow-lg mb-16">
+      <h2
+        class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800"
+      >
+        UI 컴포넌트 데모
+      </h2>
+
+      <div class="space-y-8">
+        <!-- 버튼 데모 -->
+        <div>
+          <h3 class="text-xl font-semibold mb-4 text-gray-700">
+            버튼 컴포넌트
+          </h3>
+          <div class="flex flex-wrap gap-4">
             <BaseButton variant="primary">Primary</BaseButton>
             <BaseButton variant="secondary">Secondary</BaseButton>
             <BaseButton variant="outline">Outline</BaseButton>
             <BaseButton variant="text">Text</BaseButton>
+            <BaseButton variant="primary" size="small">Small</BaseButton>
+            <BaseButton variant="primary" size="large">Large</BaseButton>
+            <BaseButton variant="primary" loading>Loading</BaseButton>
+            <BaseButton variant="primary" disabled>Disabled</BaseButton>
           </div>
         </div>
 
-        <div class="demo-item">
-          <h3>입력 컴포넌트</h3>
-          <div class="input-demo">
+        <!-- 입력 필드 데모 -->
+        <div>
+          <h3 class="text-xl font-semibold mb-4 text-gray-700">
+            입력 필드 컴포넌트
+          </h3>
+          <div class="grid md:grid-cols-2 gap-4 max-w-2xl">
             <BaseInput
               v-model="demoInput"
-              label="이름"
-              placeholder="이름을 입력하세요"
+              label="기본 입력"
+              placeholder="텍스트를 입력하세요"
+              hint="도움말 텍스트입니다"
             />
             <BaseInput
               v-model="demoEmail"
@@ -81,20 +122,19 @@
           </div>
         </div>
 
-        <div class="demo-item">
-          <h3>모달 컴포넌트</h3>
+        <!-- 모달 데모 -->
+        <div>
+          <h3 class="text-xl font-semibold mb-4 text-gray-700">
+            모달 컴포넌트
+          </h3>
           <BaseButton @click="showModal = true">모달 열기</BaseButton>
         </div>
       </div>
     </section>
 
-    <!-- 테스트 모달 -->
-    <BaseModal
-      v-model:show="showModal"
-      title="데모 모달"
-      @close="showModal = false"
-    >
-      <p>이것은 테스트용 모달입니다!</p>
+    <!-- 데모 모달 -->
+    <BaseModal :show="showModal" title="데모 모달" @close="showModal = false">
+      <p class="mb-4">이것은 테스트용 모달입니다!</p>
       <p>Vue 3의 Teleport 기능을 사용하여 body에 렌더링됩니다.</p>
 
       <template #footer>
@@ -213,190 +253,3 @@ const goToCategory = (categoryId: string) => {
   router.push(`/category/${categoryId}`);
 };
 </script>
-
-<style scoped>
-.home-page {
-  padding: 0;
-}
-
-/* 히어로 섹션 */
-.hero-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 80px 0;
-  text-align: center;
-  margin: -20px -16px 40px;
-}
-
-.hero-content {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 16px;
-}
-
-.hero-title {
-  font-size: 3rem;
-  font-weight: bold;
-  margin-bottom: 16px;
-  line-height: 1.2;
-}
-
-.hero-description {
-  font-size: 1.25rem;
-  margin-bottom: 32px;
-  opacity: 0.9;
-}
-
-.hero-actions {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-/* 섹션 공통 스타일 */
-.section-title {
-  font-size: 2rem;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 32px;
-  color: #1f2937;
-}
-
-/* 카테고리 섹션 */
-.categories-section {
-  margin-bottom: 80px;
-}
-
-.categories-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
-}
-
-.category-card {
-  height: 100%;
-}
-
-.category-content {
-  text-align: center;
-  padding: 16px;
-}
-
-.category-icon {
-  font-size: 3rem;
-  margin-bottom: 16px;
-}
-
-.category-name {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: #1f2937;
-}
-
-.category-description {
-  color: #6b7280;
-  margin: 0;
-}
-
-/* 특징 섹션 */
-.features-section {
-  margin-bottom: 80px;
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 32px;
-}
-
-.feature-item {
-  text-align: center;
-}
-
-.feature-icon {
-  font-size: 3rem;
-  margin-bottom: 16px;
-}
-
-.feature-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: #1f2937;
-}
-
-.feature-description {
-  color: #6b7280;
-  margin: 0;
-  line-height: 1.6;
-}
-
-/* 데모 섹션 */
-.demo-section {
-  background: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  margin-bottom: 40px;
-}
-
-.demo-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 32px;
-}
-
-.demo-item h3 {
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin-bottom: 16px;
-  color: #1f2937;
-}
-
-.button-demo {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.input-demo {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-/* 반응형 디자인 */
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 2rem;
-  }
-
-  .hero-description {
-    font-size: 1rem;
-  }
-
-  .hero-actions {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .section-title {
-    font-size: 1.5rem;
-  }
-
-  .categories-grid,
-  .features-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .demo-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .button-demo {
-    flex-direction: column;
-  }
-}
-</style>
