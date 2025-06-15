@@ -1,0 +1,49 @@
+services:
+  # Vue.js 개발 서버
+  vue-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: development-stage
+    container_name: vue-commerce-dev
+    ports:
+      - "5173:5173"  # Vite 개발 서버 기본 포트
+    volumes:
+      - .:/app  # 소스 코드 실시간 동기화
+      - /app/node_modules  # node_modules 볼륨 마운트로 성능 최적화
+    environment:
+      - NODE_ENV=development
+      - VITE_DEV_SERVER_HOST=0.0.0.0
+    restart: unless-stopped
+    networks:
+      - vue-commerce-dev-network
+    # 파일 변경 감지를 위한 설정
+    stdin_open: true
+    tty: true
+
+  # Jenkins CI/CD 서버 (개발용)
+  jenkins-dev:
+    image: jenkins/jenkins:lts
+    container_name: vue-commerce-jenkins-dev
+    ports:
+      - "8081:8080"  # 프로덕션과 포트 충돌 방지
+      - "50001:50000"
+    volumes:
+      - jenkins_dev_data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./:/workspace
+    environment:
+      - JENKINS_OPTS=--httpPort=8080
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+    restart: unless-stopped
+    networks:
+      - vue-commerce-dev-network
+    user: root
+
+volumes:
+  jenkins_dev_data:
+    driver: local
+
+networks:
+  vue-commerce-dev-network:
+    driver: bridge 

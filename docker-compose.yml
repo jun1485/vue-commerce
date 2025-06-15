@@ -1,0 +1,41 @@
+services:
+  # Vue.js 애플리케이션
+  vue-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production-stage
+    container_name: vue-commerce-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    networks:
+      - vue-commerce-network
+
+  # Jenkins CI/CD 서버
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: vue-commerce-jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./:/workspace
+    environment:
+      - JENKINS_OPTS=--httpPort=8080
+    restart: unless-stopped
+    networks:
+      - vue-commerce-network
+    user: root
+
+volumes:
+  jenkins_data:
+    driver: local
+
+networks:
+  vue-commerce-network:
+    driver: bridge 

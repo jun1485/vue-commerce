@@ -1,0 +1,23 @@
+# 개발 스테이지
+FROM node:20-alpine AS development-stage
+
+# pnpm 설치
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+# 작업 디렉토리 설정
+WORKDIR /app
+
+# package.json과 pnpm-lock.yaml 복사
+COPY package.json pnpm-lock.yaml ./
+
+# 의존성 설치 (dev dependencies 포함)
+RUN pnpm install
+
+# 소스 코드 복사
+COPY . .
+
+# 개발 서버 포트 노출
+EXPOSE 5173
+
+# 개발 서버 실행
+CMD ["pnpm", "run", "dev", "--host", "0.0.0.0"] 
